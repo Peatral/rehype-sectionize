@@ -9,6 +9,7 @@ export type RehypeSectionizeOptions = {
   enableRootSection?: boolean | undefined;
   rankPropertyName?: string | undefined;
   idPropertyName?: string | undefined;
+  classPropertyName?: string | undefined;
 };
 
 const defaultOptions: Required<RehypeSectionizeOptions> = {
@@ -16,6 +17,7 @@ const defaultOptions: Required<RehypeSectionizeOptions> = {
   enableRootSection: false,
   rankPropertyName: "dataHeadingRank",
   idPropertyName: "ariaLabelledby",
+  classPropertyName: "heading",
 };
 
 const wrappingRank = (
@@ -42,11 +44,11 @@ const createElement = (
   rank: number,
   options: Pick<
     RehypeSectionizeOptions,
-    "properties" | "rankPropertyName" | "idPropertyName"
+    "properties" | "rankPropertyName" | "idPropertyName" | "classPropertyName"
   >,
   children: Element[] = [],
 ) => {
-  const { properties, rankPropertyName, idPropertyName } = options;
+  const { properties, rankPropertyName, idPropertyName, classPropertyName } = options;
 
   if (
     properties != null &&
@@ -63,7 +65,7 @@ const createElement = (
     type: "element",
     tagName: "section",
     properties: {
-      className: ["heading"],
+      ...(classPropertyName ? { className: [classPropertyName] } : {}),
       ...(rankPropertyName ? { [rankPropertyName]: rank } : {}),
       ...(idPropertyName && typeof id === "string"
         ? { [idPropertyName]: id }
@@ -86,6 +88,7 @@ const sectionize: Plugin<[RehypeSectionizeOptions?], Root> = (
     rankPropertyName:
       options.rankPropertyName ?? defaultOptions.rankPropertyName,
     idPropertyName: options.idPropertyName ?? defaultOptions.idPropertyName,
+    classPropertyName: options.classPropertyName ?? defaultOptions.classPropertyName,
   };
 
   return (root) => {
