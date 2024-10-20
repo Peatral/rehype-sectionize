@@ -15,7 +15,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
-    "lint": "rome ci src tests"
+    "lint": "rome ci src tests",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
